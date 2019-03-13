@@ -72,9 +72,11 @@ class Gui {
     //         b.attribute("onclick", `pick('${Global.colors[i]}')`);
     //         i++;
     //     }
+
+    // }
+
 }
 
-    constructor(pos) {
 class Segment {
     constructor(iJ) {
         this.pos = {
