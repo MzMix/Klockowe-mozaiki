@@ -1,5 +1,5 @@
 const Global = {
-    segmentsPerSide: 24,
+    segmentsPerSide: 10, //MAX 24, default 10
     segmentSize: 40,
     segments: [],
     indexFillColor: '#F64C72',
