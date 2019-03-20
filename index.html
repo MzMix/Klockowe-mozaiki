@@ -16,14 +16,41 @@
 </head>
 
 <body>
-    <div class="header">Klockiem w matematykę!</div>
-    <div class="name">Klockowe Mozaiki</div>
+    <div class="header hide">Klockiem w matematykę!</div>
+    <div class="name hide">Klockowe Mozaiki</div>
+    <div class="container">
+        <!-- <div><button onclick="Global.Gui.showOptions()">Pokaż opcje</button></div> -->
+        <div class="colorPick">Paleta kolorów:</div>
+        <div class="box"></div>
+        <div class="colorsUsed">Użyte kolory:</div>
+    </div>
+    <div class="footer hide">Wersja: 1.2.8 z dnia : 20.03.2019</div>
 
-    <div class="colorPick"></div>
-    <div class="box"></div>
-    <div class="colorsUsed"></div>
-
-    <div class="footer">Wersja: 1.2.6 z dnia : 08.03.2019</div>
+    <!-- <div class="modal" id="modal1">
+        <div class="modal-content"><span class="close" id="closeBtn">×</span>
+            <h1>Opcje:</h1>
+            <div class="modalContentSection" id="list">
+                <div class="spacer">Zmiana opisu pól</div><select>
+                    <option value="Brak opisów">Brak opisów</option>
+                    <option value="Numeracja">Numeracja</option>
+                    <option value="Adresowanie">Adresowanie</option>
+                    <option value="Tabliczka mnożenia">Tabliczka mnożenia</option>
+                </select>
+            </div>
+            <div class="modalContentSection" id="set">
+                <div class="spacer">Zmiana zestawu</div><select>
+                    <option value="Zestaw 1">Zestaw 1</option>
+                    <option value="Zestaw 2">Zestaw 2</option>
+                </select>
+            </div>
+            <div class="modalContentSection" id="reset">
+                <div class="spacer">Reset planszy:</div><button>Reset</button>
+            </div>
+            <div class="modalContentSection" id="saveImg">
+                <div class="spacer">Zapis planszy do pliku:</div><button>Zapisz</button>
+            </div>
+        </div>
+    </div> -->
 
     <script src="objects.js"></script>
     <script src="sketch.js"></script>

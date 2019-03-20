@@ -4,12 +4,14 @@ const Global = {
     segments: [],
     indexFillColor: '#F64C72',
     indexStrokeColor: 'pink',
-    segmentFillColor: '#C0C0C0',
-    segmentStrokeColor: 'white',
+    segmentFillColor: 'white',
+    segmentStrokeColor: 'black',
     letters: ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'r', 's', 't', 'u', 'w', 'y', 'z', ],
-    colors: ['green', 'deepskyblue', 'purple', 'khaki', 'red', 'greenyellow', 'black', 'white', 'saddlebrown', 'darkorange', '#C0C0C0', ],
-    colorsSet1: ['green', 'deepskyblue', 'purple', 'khaki', 'red', 'greenyellow', 'black', 'white', 'saddlebrown', 'darkorange', '#C0C0C0', ],
-    colorsSet2: ['green', 'deepskyblue', 'purple', 'yellow', 'red', 'greenyellow', 'black', 'white', 'blue', 'darkorange', '#C0C0C0', ],
+    colors: ['green', 'deepskyblue', 'purple', 'khaki', 'red', 'greenyellow', 'black', 'saddlebrown', 'darkorange', 'white', ],
+    colorsSet1: ['green', 'deepskyblue', 'purple', 'khaki', 'red', 'greenyellow', 'black', 'saddlebrown', 'darkorange', 'white', ],
+    colorsSet2: ['green', 'deepskyblue', 'purple', 'yellow', 'red', 'greenyellow', 'black', 'blue', 'darkorange', 'white', ],
+    pickedColor: '',
+    listOfPickedColors: [],
 }
 
 class Gui {
@@ -35,19 +37,37 @@ class Gui {
 
     generateColorPick() {
 
-        for (let color of Global.colors) {
+        for (let col of Global.colors) {
 
-            let div = Global.colors.indexOf(color) == Global.colors.length - 1 ? createDiv('G') : createDiv('&nbsp;');
-            div.style('background-color', color);
+            let div = createDiv('&nbsp;');
+            div.style('background-color', col);
             div.addClass('colorIcon');
-            div.attribute('onclick', 'Global.Gui.handleColorPick(color)');
+            div.attribute('onclick', `Global.Gui.handleColorPick('${col}')`);
             select('.colorPick').child(div);
         }
 
     }
 
-    handleColorPick(color) {
+    handleColorPick(col) {
+        Global.pickedColor = col;
 
+        if (col == "white") return;
+
+        if (!Global.listOfPickedColors.includes(col)) {
+            Global.listOfPickedColors.push(col);
+            this.updateListOfColors();
+        }
+    }
+
+    updateListOfColors() {
+        let div = select('.colorsUsed');
+        let htmlInsert = 'Użyte kolory:';
+
+        for (let col of Global.listOfPickedColors) {
+            htmlInsert += `<div class = "color" style="background-color: ${col}" onclick="Global.Gui.handleColorPick('${col}')"> ${Global.listOfPickedColors.indexOf(col) +1} </div>`;
+        }
+
+        div.html(htmlInsert);
     }
 
     saveImg() {
@@ -55,25 +75,35 @@ class Gui {
         saveCanvas(`mozaika-${data.getHours()}-${data.getMinutes()}-${data.getSeconds()}`, 'png');
     }
 
-    //Imput list required!
-    // changeSet() {
-    //     let type = this.value();
+    toogleBoardView() {
+        for (let seg of Global.segments) {
+            seg.toogleView();
+        }
+    }
 
-    //     if (type == "Zestaw 1") {
-    //         Global.colors = Global.mtmColors;
-    //     } else if (type == "Zestaw 2") {
-    //         Global.colors = Global.crColors;
-    //     }
+    hideElements() {
+        let elements = selectAll('.hide');
 
-    //     let btns = selectAll('.paletteBtn');
-    //     let i = 0;
-    //     for (let b of btns) {
-    //         b.style('background-color', Global.colors[i]);
-    //         b.attribute("onclick", `pick('${Global.colors[i]}')`);
-    //         i++;
-    //     }
+        for (let e of elements) {
+            if (Global.infoHide) {
+                e.show();
+            } else {
+                e.hide();
+            }
+        }
 
-    // }
+        if (Global.infoHide) {
+            select('.container').style('margin-top', '0px')
+        } else {
+            select('.container').style('margin-top', '75px')
+        }
+
+        Global.infoHide = !Global.infoHide;
+    }
+
+    showOptions() {
+
+    }
 
 }
 
@@ -85,21 +115,39 @@ class Segment {
         };
 
         this.curve = 2;
+        this.fill = Global.segmentFillColor;
     }
 
     draw() {
         push();
         translate(this.pos.x, this.pos.y);
         stroke(Global.segmentStrokeColor);
-        fill(Global.segmentFillColor);
+        fill(this.fill);
         rect(0, 0, Global.segmentSize, Global.segmentSize, this.curve)
+
+        if (this.txt) {
+            stroke(0);
+            fill(0);
+            textAlign(CENTER, CENTER);
+            text(this.txt, 0, 0, Global.segmentSize, Global.segmentSize);
+        }
+
         pop();
     }
 
     checkPointing() {
-        return mouseX.between(this.pos.x, this.pos.x + this.dim) &&
-            mouseY.between(this.pos.y, this.pos.y + this.dim);
+        return mouseX.between(this.pos.x, this.pos.x + Global.segmentSize) &&
+            mouseY.between(this.pos.y, this.pos.y + Global.segmentSize);
     }
+
+    toogleView() {
+        if (this.fill != 'white') {
+            this.txt = Global.listOfPickedColors.indexOf(this.fill) + 1;
+            this.prevFill = this.fill;
+            this.fill = Global.segmentFillColor;
+        }
+    }
+
 }
 
 class Index extends Segment {
@@ -128,4 +176,5 @@ class Index extends Segment {
 
         pop();
     }
+    toogleView() {}
 }

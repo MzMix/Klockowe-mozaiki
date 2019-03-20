@@ -32,3 +32,14 @@ function draw() {
     }
 
 }
+
+function mouseClicked() {
+    for (let seg of Global.segments) {
+        if (!(seg instanceof Index) && seg.checkPointing()) {
+
+            if (Global.pickedColor != '') seg.fill = Global.pickedColor;
+
+            break;
+        }
+    }
+}
